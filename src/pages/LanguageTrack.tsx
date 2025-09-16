@@ -7,6 +7,7 @@ export type LanguageTrack = {
   description: string;
   gradient: string;
   totalLevels: number;
+  color?: string;
   levels: Array<{
     id: number;
     title: string;
@@ -15,11 +16,12 @@ export type LanguageTrack = {
     codeExample?: string;
     estimatedTime: string;
     difficulty: string;
+    prerequisites?: number[];
   }>;
 };
 
 // ...existing code...
-import { LanguageTrack } from '../types';
+
 
 export const languageTracks: LanguageTrack[] = [
   {
