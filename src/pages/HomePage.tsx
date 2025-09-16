@@ -2,13 +2,13 @@
 import { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { BookOpen, Trophy, Users, Star, ChevronRight, Zap, Sparkles, Rocket, Target, Code } from 'lucide-react';
-import { languageTracks } from '../data/languageTracks';
+import { languageTracks, LanguageTrack } from '../data/languageTracks';
 import { useScrollReveal } from '../hooks/useAnimations';
 
 
 const HomePage = () => {
   // const navigate = useNavigate();
-  const [selectedTrack, setSelectedTrack] = useState(null);
+  const [selectedTrack, setSelectedTrack] = useState<LanguageTrack | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -118,8 +118,11 @@ const HomePage = () => {
               </div>
               
               <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                {/* Removed navigation button to avoid TS error and URL change */}
                 <button
-                  onClick={() => navigate('/html')}
+                  onClick={() => {
+                    document.getElementById('language-tracks')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                   className="btn-primary group relative overflow-hidden"
                 >
                   <span className="relative z-10 flex items-center gap-3">
@@ -249,7 +252,7 @@ const HomePage = () => {
             <div className="mb-6">
               <h3 className="text-xl font-bold mb-2">Levels</h3>
               <ul className="space-y-3">
-                {selectedTrack.levels.map((level) => (
+                {selectedTrack.levels.map((level: any) => (
                   <li key={level.id} className="border rounded-lg p-4 hover:bg-gray-50 transition">
                     <div className="flex items-center justify-between mb-2">
                       <span className="font-semibold text-blue-700">Level {level.id}: {level.title}</span>
@@ -257,7 +260,7 @@ const HomePage = () => {
                     </div>
                     <div className="text-gray-700 text-sm mb-2">{level.description}</div>
                     <div className="flex flex-wrap gap-2 text-xs">
-                      {level.topics.slice(0, 3).map((topic) => (
+                      {level.topics.slice(0, 3).map((topic: string) => (
                         <span key={topic} className="px-2 py-1 bg-blue-50 text-blue-700 rounded-full border border-blue-100 font-medium">{topic}</span>
                       ))}
                       {level.topics.length > 3 && (
@@ -401,8 +404,11 @@ const HomePage = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-8 justify-center items-center mb-12">
+                {/* Removed navigation button to avoid TS error and URL change */}
                 <button
-                  onClick={() => navigate('/html')}
+                  onClick={() => {
+                    document.getElementById('language-tracks')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                   className="btn-primary text-xl px-16 py-6 group relative"
                 >
                   <span className="relative z-10 flex items-center gap-4">
