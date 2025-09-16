@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
+/* React import not needed in >=17 */
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import HomePage from './pages/HomePage'
+import LanguageTrack from './pages/LanguageTrack'
+import LevelPage from './pages/LevelPage'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import { ProgressProvider } from './context/ProgressContext'
+import { AuthProvider } from './context/AuthContext'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+ 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <AuthProvider>
+      <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+        <ProgressProvider>
+          <Router>
+            <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/register" element={<RegisterPage />} />
+                <Route path="/" element={<HomePage />} />
+                <Route path="/:language" element={<LanguageTrack />} />
+                <Route path="/:language/level/:levelId" element={<LevelPage />} />
+              </Routes>
+            </div>
+          </Router>
+        </ProgressProvider>
+      </GoogleOAuthProvider>
+    </AuthProvider>
   )
-}
-
-export default App
+ }
+ 
+ export default App
