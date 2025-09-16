@@ -1,7 +1,7 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage'
-import LanguageTrack from './pages/LanguageTrack'
-import LevelPage from './pages/LevelPage'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import LanguageTrack from './pages/LanguageTrack';
+import LevelPage from './pages/LevelPage';
 
 function App() {
   return (
@@ -14,8 +14,7 @@ function App() {
         </Routes>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
-
+export default App;
