@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
-import LanguageTrack from './pages/LanguageTrack';
+import { LanguageTrack } from './pages/LanguageTrack';
 import LevelPage from './pages/LevelPage';
 
 function App() {
@@ -18,3 +18,4 @@ function App() {
 }
 
 export default App;
+
