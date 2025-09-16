@@ -2,14 +2,12 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, CheckCircle, Play, Book, Clock, Trophy } from 'lucide-react';
 import { languageTracks } from '../data/languageTracks';
-import { useProgress } from '../context/ProgressContext';
 import TopicModal from '../components/TopicModal';
 import topicData, { TopicDetails } from '../data/topicData';
 
 const LevelPage = () => {
   const { language, levelId } = useParams<{ language: string; levelId: string }>();
   const navigate = useNavigate();
-  const { updateProgress, getProgress } = useProgress();
   const [selectedTopic, setSelectedTopic] = useState<TopicDetails | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -20,7 +18,6 @@ const LevelPage = () => {
 
   const track = languageTracks.find(t => t.id === language);
   const level = track?.levels.find(l => l.id === parseInt(levelId || '0'));
-  const progress = getProgress(language || '');
 
   if (!track || !level) {
     return (
@@ -38,10 +35,11 @@ const LevelPage = () => {
     );
   }
 
-  const isCompleted = progress?.completedLevels.includes(level.id) || false;
+  // All levels are unlocked and none are completed (static demo)
+  const isCompleted = false;
 
   const handleCompleteLevel = () => {
-    updateProgress(language!, level.id);
+    // No-op in static demo
   };
 
   const handleNextLevel = () => {
@@ -233,20 +231,17 @@ const LevelPage = () => {
                 <div>
                   <div className="flex justify-between text-sm text-gray-600 mb-1">
                     <span>Track Progress</span>
-                    <span>{progress?.completedLevels.length || 0}/{track.totalLevels}</span>
+                    <span>0/{track.totalLevels}</span>
                   </div>
                   <div className="bg-gray-200 rounded-full h-2">
                     <div
                       className={`h-2 bg-gradient-to-r ${track.gradient} rounded-full transition-all duration-500`}
-                      style={{ 
-                        width: `${((progress?.completedLevels.length || 0) / track.totalLevels) * 100}%` 
-                      }}
+                      style={{ width: `0%` }}
                     ></div>
                   </div>
                 </div>
-                
                 <div>
-                  <div className="text-2xl font-bold text-gray-900">{progress?.totalXP || 0}</div>
+                  <div className="text-2xl font-bold text-gray-900">0</div>
                   <div className="text-sm text-gray-600">Total XP Earned</div>
                 </div>
               </div>
@@ -263,16 +258,11 @@ const LevelPage = () => {
                     className={`w-full text-left p-3 rounded-lg transition-colors ${
                       l.id === level.id
                         ? 'bg-blue-100 text-blue-800 border border-blue-200'
-                        : progress?.completedLevels.includes(l.id)
-                        ? 'bg-green-50 text-green-800 hover:bg-green-100'
                         : 'text-gray-600 hover:bg-gray-50'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="font-medium">Level {l.id}</span>
-                      {progress?.completedLevels.includes(l.id) && (
-                        <CheckCircle className="w-4 h-4 text-green-600" />
-                      )}
                     </div>
                     <div className="text-sm opacity-75">{l.title}</div>
                   </button>
