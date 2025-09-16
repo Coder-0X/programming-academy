@@ -1,6 +1,6 @@
 // ...existing code...
 
-export type LanguageTrack = {
+type LanguageTrack = {
   id: string;
   name: string;
   icon: string;
@@ -19,6 +19,8 @@ export type LanguageTrack = {
     prerequisites?: number[];
   }>;
 };
+
+export type { LanguageTrack };
 
 // ...existing code...
 
