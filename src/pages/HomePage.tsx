@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 // import { useNavigate } from 'react-router-dom';
 import { BookOpen, Trophy, Users, Star, ChevronRight, Zap, Sparkles, Rocket, Target, Code } from 'lucide-react';
-import { languageTracks, LanguageTrack } from '../data/languageTracks';
+import { languageTracks } from '../data/languageTracks';
+import { LanguageTrack } from '../types';
 import { useScrollReveal } from '../hooks/useAnimations';
 
 
