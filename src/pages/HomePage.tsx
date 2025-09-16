@@ -221,29 +221,6 @@ const HomePage = () => {
           ))}
         </div>
 
-          {/* Modal for selected track */}
-          {selectedTrack && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-8 relative">
-                <button onClick={closeModal} className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
-                <div className="flex items-center mb-4">
-                  <div className="text-5xl mr-4">{selectedTrack.icon}</div>
-                  <div>
-                    <h2 className="text-3xl font-bold mb-1">{selectedTrack.name}</h2>
-                    <div className="text-gray-600 text-sm">{selectedTrack.totalLevels} Levels</div>
-                  </div>
-                </div>
-                <div className="mb-4 text-gray-700">{selectedTrack.description}</div>
-                <ul className="list-disc pl-6 text-gray-700">
-                  {selectedTrack.levels && selectedTrack.levels.map((level: Level) => (
-                    <li key={level.id} className="mb-2">
-                      <span className="font-semibold">Level {level.id}:</span> {level.title}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          )}
       </div>
 
       {/* Revolutionary Features Section */}
