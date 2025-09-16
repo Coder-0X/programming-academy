@@ -5,10 +5,7 @@ import LanguageTrack from './pages/LanguageTrack'
 import LevelPage from './pages/LevelPage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
-import { ProgressProvider } from './context/ProgressContext'
-import { AuthProvider } from './context/AuthContext'
-import { GoogleOAuthProvider } from '@react-oauth/google'
- 
+
 function App() {
   return (
     <AuthProvider>
@@ -32,3 +29,4 @@ function App() {
  }
  
  export default App
+
