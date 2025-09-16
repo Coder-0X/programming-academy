@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
-import { ArrowLeft, Play, Clock, Book, CheckCircle, Lock } from 'lucide-react';
+import { ArrowLeft, Play, Clock, Book } from 'lucide-react';
 import { languageTracks } from '../data/languageTracks';
 
 
@@ -32,10 +32,7 @@ const LanguageTrack = () => {
   }
 
   // All levels are unlocked and none are completed (static demo)
-  const completedLevels: number[] = [];
   const currentLevel = 1;
-
-  const isLevelUnlocked = (levelId: number) => true;
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -96,10 +93,7 @@ const LanguageTrack = () => {
       <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {track.levels.map((level) => {
-            const isCompleted = false;
-            const isUnlocked = true;
-            const isCurrent = level.id === currentLevel && !isCompleted;
-
+            const isCurrent = level.id === currentLevel;
             return (
               <div
                 key={level.id}
@@ -108,14 +102,12 @@ const LanguageTrack = () => {
               >
                 {/* Animated Background Gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${track.gradient} opacity-5 rounded-xl`}></div>
-                
                 {/* Status Icon with enhanced styling */}
                 <div className="absolute -top-3 -right-3 z-10">
                   <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
                     <Play className="w-6 h-6 text-white ml-1" />
                   </div>
                 </div>
-
                 <div className="relative z-10 mb-6">
                   <div className="flex items-center justify-between mb-3">
                     <span className="text-sm font-bold text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
@@ -128,18 +120,15 @@ const LanguageTrack = () => {
                   <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">{level.title}</h3>
                   <p className="text-gray-600 text-sm leading-relaxed">{level.description}</p>
                 </div>
-
                 <div className="space-y-4 relative z-10">
                   <div className="flex items-center text-sm text-gray-500">
                     <Clock className="w-4 h-4 mr-2 text-blue-500" />
                     <span className="font-medium">{level.estimatedTime}</span>
                   </div>
-                  
                   <div className="flex items-center text-sm text-gray-500">
                     <Book className="w-4 h-4 mr-2 text-green-500" />
                     <span className="font-medium">{level.topics.length} Topics</span>
                   </div>
-
                   <div className="flex flex-wrap gap-2">
                     {level.topics.slice(0, 3).map((topic) => (
                       <span
