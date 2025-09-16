@@ -5,15 +5,15 @@ import { languageTracks } from '../data/languageTracks';
 
 
 const LanguageTrack = () => {
-  const { language } = useParams<{ language: string }>();
+  const { language: languageId } = useParams<{ language: string }>();
   const navigate = useNavigate();
 
   // Scroll to top when component mounts
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [language]);
+  }, [languageId]);
 
-  const track = languageTracks.find(t => t.id === language);
+  const track = languageTracks.find(t => t.id === languageId);
 
   if (!track) {
     return (
@@ -98,7 +98,7 @@ const LanguageTrack = () => {
               <div
                 key={level.id}
                 className={`level-card relative transform transition-all duration-300 cursor-pointer hover:scale-105 ${isCurrent ? 'ring-2 ring-blue-500 shadow-glow' : ''}`}
-                onClick={() => navigate(`/${language}/level/${level.id}`)}
+                onClick={() => navigate(`/${languageId}/level/${level.id}`)}
               >
                 {/* Animated Background Gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${track.gradient} opacity-5 rounded-xl`}></div>
