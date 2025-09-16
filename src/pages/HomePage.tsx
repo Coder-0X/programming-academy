@@ -1,8 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BookOpen, Trophy, Users, Star, ChevronRight, Zap, Sparkles, Rocket, Target } from 'lucide-react';
 import { languageTracks } from '../data/languageTracks';
 import { useScrollReveal } from '../hooks/useAnimations';
+
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -41,6 +43,7 @@ const HomePage = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 relative overflow-visible">
+
       {/* Advanced Particle Background */}
       <div className="particle-bg">
         {[...Array(60)].map((_, i) => (
@@ -58,7 +61,7 @@ const HomePage = () => {
         ))}
       </div>
 
-      {/* Hero Section */}
+      {/* Revolutionary Hero Section */}
       <div className="relative hero-gradient">
         <div className="hero-overlay">
           <div 
@@ -136,7 +139,7 @@ const HomePage = () => {
         </div>
       </div>
 
-      {/* Language Tracks Section */}
+      {/* Enhanced Language Tracks Section */}
       <div id="language-tracks" className="max-w-7xl mx-auto px-4 py-24 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-20 scroll-reveal">
           <div className="inline-flex items-center gap-4 mb-8">
@@ -217,10 +220,191 @@ const HomePage = () => {
             </div>
           ))}
         </div>
+
+          {/* Modal for selected track */}
+          {selectedTrack && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white rounded-lg shadow-lg max-w-lg w-full p-8 relative">
+                <button onClick={closeModal} className="absolute top-2 right-2 text-gray-500 hover:text-gray-800 text-2xl">&times;</button>
+                <div className="flex items-center mb-4">
+                  <div className="text-5xl mr-4">{selectedTrack.icon}</div>
+                  <div>
+                    <h2 className="text-3xl font-bold mb-1">{selectedTrack.name}</h2>
+                    <div className="text-gray-600 text-sm">{selectedTrack.totalLevels} Levels</div>
+                  </div>
+                </div>
+                <div className="mb-4 text-gray-700">{selectedTrack.description}</div>
+                <ul className="list-disc pl-6 text-gray-700">
+                  {selectedTrack.levels && selectedTrack.levels.map((level: Level) => (
+                    <li key={level.id} className="mb-2">
+                      <span className="font-semibold">Level {level.id}:</span> {level.title}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
       </div>
 
-      {/* Features and CTA sections remain unchanged */}
-      {/* ... (rest of your code for features and CTA) ... */}
+      {/* Revolutionary Features Section */}
+      <div className="wave-background py-24 relative overflow-visible">
+        {/* Static Background Orbs */}
+        <div className="absolute inset-0 opacity-30">
+          <div className="absolute top-20 left-20 w-80 h-80 bg-gradient-to-r from-white/20 to-white/10 rounded-full filter blur-3xl"></div>
+          <div className="absolute top-20 right-20 w-80 h-80 bg-gradient-to-r from-white/15 to-white/5 rounded-full filter blur-3xl"></div>
+          <div className="absolute bottom-40 left-1/2 transform -translate-x-1/2 w-96 h-96 bg-gradient-to-r from-white/25 to-white/8 rounded-full filter blur-3xl"></div>
+        </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="text-center mb-20 scroll-reveal">
+            <div className="inline-flex items-center gap-4 mb-8">
+              <Sparkles className="w-8 h-8 text-purple-500 animate-pulse-glow" />
+              <h2 className="text-6xl font-bold color-flow-text color-flow-glow">
+                Why Choose Programming Academy?
+              </h2>
+              <Sparkles className="w-8 h-8 text-blue-500 animate-pulse-glow" />
+            </div>
+            <p className="text-xl text-white/80 max-w-4xl mx-auto font-medium drop-shadow">
+              Experience the future of programming education with our revolutionary platform
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+            {[
+              {
+                icon: Code,
+                title: 'Interactive Examples',
+                description: 'Learn by doing with hands-on coding examples, real-time feedback, and intelligent code completion',
+                color: 'from-blue-500 via-purple-500 to-pink-500',
+                accent: 'blue'
+              },
+              {
+                icon: BookOpen,
+                title: 'Progressive Learning',
+                description: 'Structured curriculum designed by industry experts, from absolute beginner to advanced developer',
+                color: 'from-green-500 via-teal-500 to-cyan-500',
+                accent: 'green'
+              },
+              {
+                icon: Trophy,
+                title: 'Achievement System',
+                description: 'Track your progress, earn exclusive badges, unlock achievements, and celebrate every milestone',
+                color: 'from-yellow-500 via-orange-500 to-red-500',
+                accent: 'yellow'
+              },
+              {
+                icon: Zap,
+                title: 'Modern UI/UX',
+                description: 'Beautiful, responsive design with cutting-edge animations that adapts seamlessly to any device',
+                color: 'from-pink-500 via-purple-500 to-indigo-500',
+                accent: 'pink'
+              }
+            ].map((feature, index) => (
+              <div
+                key={feature.title}
+                className="feature-card scroll-reveal scale-in group"
+                style={{ animationDelay: `${index * 0.2}s` }}
+              >
+                <div className={`feature-icon bg-gradient-to-br ${feature.color} group-hover:shadow-glow`}>
+                  <feature.icon className="w-8 h-8" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                  {feature.title}
+                </h3>
+                <p className="text-gray-700 leading-relaxed font-medium">{feature.description}</p>
+                
+                {/* Feature Enhancement Indicator */}
+                <div className="mt-6 flex items-center justify-center">
+                  <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${feature.color} animate-pulse-glow`}></div>
+                  <div className={`w-1 h-1 rounded-full bg-gradient-to-r ${feature.color} mx-1 opacity-60`}></div>
+                  <div className={`w-1 h-1 rounded-full bg-gradient-to-r ${feature.color} opacity-40`}></div>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Enhanced Stats Section */}
+          <div className="mt-20 text-center scroll-reveal">
+            <h3 className="text-4xl font-bold text-white drop-shadow-lg mb-12">Join the Revolution</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              { [
+                { number: '10K+', label: 'Students Learning', icon: Users },
+                { number: '50', label: 'Interactive Levels', icon: Target },
+                { number: '5', label: 'Programming Languages', icon: Code },
+                { number: '99%', label: 'Success Rate', icon: Trophy }
+              ].map(stat => (
+                <div key={stat.label} className="text-center group">
+                  <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 text-white mb-4 group-hover:scale-110 transition-transform duration-300">
+                    <stat.icon className="w-8 h-8" />
+                  </div>
+                  <div className="text-3xl font-bold text-gradient mb-2">{stat.number}</div>
+                  <div className="text-gray-600 font-medium">{stat.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Ultimate CTA Section */}
+      <div className="hero-gradient relative overflow-visible">
+        <div className="hero-overlay">
+          <div className="max-w-5xl mx-auto text-center px-4 sm:px-6 lg:px-8 py-24">
+            <div className="scroll-reveal">
+              <div className="inline-flex items-center gap-4 mb-8">
+                <Rocket className="w-12 h-12 text-yellow-300 animate-float" />
+                <h2 className="text-6xl font-bold text-white">
+                  Ready to Start Your <span className="animate-text-shimmer">Epic Coding Journey</span>?
+                </h2>
+                <Sparkles className="w-12 h-12 text-pink-300 animate-pulse-glow" />
+              </div>
+              
+              <p className="text-xl mb-12 text-blue-100 leading-relaxed max-w-3xl mx-auto font-medium">
+                Join thousands of developers who have transformed their careers with our academy. 
+                Your programming adventure begins with a single click. Are you ready to code your future? 🚀
+              </p>
+              
+              <div className="flex flex-col sm:flex-row gap-8 justify-center items-center mb-12">
+                <button
+                  onClick={() => navigate('/html')}
+                  className="btn-primary text-xl px-16 py-6 group relative"
+                >
+                  <span className="relative z-10 flex items-center gap-4">
+                    <Rocket className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+                    Begin with HTML
+                    <ChevronRight className="w-6 h-6 group-hover:translate-x-2 transition-transform duration-300" />
+                  </span>
+                </button>
+                
+                <div className="text-center">
+                  <div className="text-blue-100 text-sm font-medium mb-2">
+                    ✨ No credit card required • Free to start • 50 levels of premium content
+                  </div>
+                  <div className="flex items-center justify-center gap-2 text-blue-200 text-xs">
+                    <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse"></div>
+                    <span>Trusted by 10,000+ developers worldwide</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Social Proof */}
+              <div className="flex flex-wrap justify-center items-center gap-8 opacity-80">
+                <div className="text-blue-200 text-sm font-medium">As featured in:</div>
+                {['TechCrunch', 'Product Hunt', 'Hacker News', 'Dev.to'].map((platform) => (
+                  <div key={platform} className="text-blue-100 text-sm font-semibold px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm">
+                    {platform}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Floating Elements */}
+        <div className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full opacity-20 animate-float blur-xl"></div>
+        <div className="absolute bottom-20 right-20 w-24 h-24 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full opacity-20 animate-float blur-lg" style={{ animationDelay: '2s' }}></div>
+        <div className="absolute top-1/2 left-10 w-16 h-16 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-full opacity-20 animate-float blur-md" style={{ animationDelay: '4s' }}></div>
+      </div>
     </div>
   );
 };
