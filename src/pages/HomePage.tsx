@@ -1,13 +1,15 @@
 
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import { BookOpen, Trophy, Users, Star, ChevronRight, Zap, Sparkles, Rocket, Target, Code } from 'lucide-react';
 import { languageTracks } from '../data/languageTracks';
 import { useScrollReveal } from '../hooks/useAnimations';
 
 
 const HomePage = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
+  const [selectedTrack, setSelectedTrack] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   // Initialize scroll reveal animations
@@ -35,10 +37,16 @@ const HomePage = () => {
   ];
 
   const handleLanguageSelect = (languageId: string) => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    setTimeout(() => {
-      navigate(`/${languageId}`);
-    }, 100);
+    const track = languageTracks.find(t => t.id === languageId);
+    if (track) {
+      setSelectedTrack(track);
+      setIsModalOpen(true);
+    }
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedTrack(null);
   };
 
   return (
@@ -155,71 +163,122 @@ const HomePage = () => {
           </p>
         </div>
 
-        <div className="language-tracks-grid">
-          {languageTracks.map((track, index) => (
-            <div
-              key={track.id}
-              className="language-card scroll-reveal"
-              onClick={() => handleLanguageSelect(track.id)}
-              style={{ 
-                animationDelay: `${index * 0.2}s`
-              }}
-            >
-              <div className="language-card-content relative z-10">
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center">
-                    <div 
-                      className="text-6xl mr-6 animate-float track-icon" 
-                      style={{ animationDelay: `${index * 0.3}s` }}
-                    >
-                      {track.icon}
-                    </div>
-                    <div>
-                      <h3 className="text-3xl font-bold text-gray-900">
-                        {track.name}
-                      </h3>
-                      <div className="text-sm text-gray-600 font-medium mt-1">
-                        Advanced Track
+              <div className="language-tracks-grid">
+                {languageTracks.map((track, index) => (
+                  <div
+                    key={track.id}
+                    className="language-card scroll-reveal"
+                    onClick={() => handleLanguageSelect(track.id)}
+                    style={{ 
+                      animationDelay: `${index * 0.2}s`
+                    }}
+                  >
+                    <div className="language-card-content relative z-10">
+                      <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center">
+                          <div 
+                            className="text-6xl mr-6 animate-float track-icon" 
+                            style={{ animationDelay: `${index * 0.3}s` }}
+                          >
+                            {track.icon}
+                          </div>
+                          <div>
+                            <h3 className="text-3xl font-bold text-gray-900">
+                              {track.name}
+                            </h3>
+                            <div className="text-sm text-gray-600 font-medium mt-1">
+                              Advanced Track
+                            </div>
+                          </div>
+                        </div>
+                        <ChevronRight className="w-8 h-8 text-gray-500 chevron-icon" />
+                      </div>
+                      
+                      <p className="text-gray-700 mb-10 leading-relaxed text-lg font-medium">
+                        {track.description}
+                      </p>
+                      
+                      <div className="flex items-center justify-between mb-8">
+                        <div className="flex items-center text-sm text-gray-500">
+                          <BookOpen className="w-6 h-6 mr-3 text-blue-500" />
+                          <span className="font-semibold text-lg">{track.totalLevels} Comprehensive Levels</span>
+                        </div>
+                        <div className="flex items-center space-x-1">
+                          {[...Array(5)].map((_, i) => (
+                            <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="progress-bar">
+                        <div 
+                          className={`progress-fill bg-gradient-to-r ${track.gradient} relative overflow-hidden`}
+                          style={{ width: '0%' }} // Will be dynamic based on progress
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 animate-float"></div>
+                        </div>
+                      </div>
+                      
+                      <div className="mt-6 text-center">
+                        <span className="text-sm text-gray-400 font-medium px-4 py-2 rounded-full bg-gray-800">
+                          🚀 Click to embark on your journey!
+                        </span>
                       </div>
                     </div>
                   </div>
-                  <ChevronRight className="w-8 h-8 text-gray-500 chevron-icon" />
-                </div>
-                
-                <p className="text-gray-700 mb-10 leading-relaxed text-lg font-medium">
-                  {track.description}
-                </p>
-                
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center text-sm text-gray-500">
-                    <BookOpen className="w-6 h-6 mr-3 text-blue-500" />
-                    <span className="font-semibold text-lg">{track.totalLevels} Comprehensive Levels</span>
-                  </div>
-                  <div className="flex items-center space-x-1">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                </div>
-                
-                <div className="progress-bar">
-                  <div 
-                    className={`progress-fill bg-gradient-to-r ${track.gradient} relative overflow-hidden`}
-                    style={{ width: '0%' }} // Will be dynamic based on progress
-                  >
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -skew-x-12 animate-float"></div>
-                  </div>
-                </div>
-                
-                <div className="mt-6 text-center">
-                  <span className="text-sm text-gray-400 font-medium px-4 py-2 rounded-full bg-gray-800">
-                    🚀 Click to embark on your journey!
-                  </span>
-                </div>
+                ))}
+              </div>
+      {/* Modal for topic content */}
+      {isModalOpen && selectedTrack && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full p-8 relative animate-fade-in">
+            <button
+              onClick={closeModal}
+              className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl font-bold"
+              aria-label="Close"
+            >
+              ×
+            </button>
+            <div className="flex items-center mb-6">
+              <div className="text-6xl mr-6">{selectedTrack.icon}</div>
+              <div>
+                <h2 className="text-3xl font-bold mb-2">{selectedTrack.name} Track</h2>
+                <p className="text-gray-600">{selectedTrack.description}</p>
               </div>
             </div>
-          ))}
+            <div className="mb-6">
+              <h3 className="text-xl font-bold mb-2">Levels</h3>
+              <ul className="space-y-3">
+                {selectedTrack.levels.map((level) => (
+                  <li key={level.id} className="border rounded-lg p-4 hover:bg-gray-50 transition">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="font-semibold text-blue-700">Level {level.id}: {level.title}</span>
+                      <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600 capitalize">{level.difficulty}</span>
+                    </div>
+                    <div className="text-gray-700 text-sm mb-2">{level.description}</div>
+                    <div className="flex flex-wrap gap-2 text-xs">
+                      {level.topics.slice(0, 3).map((topic) => (
+                        <span key={topic} className="px-2 py-1 bg-blue-50 text-blue-700 rounded-full border border-blue-100 font-medium">{topic}</span>
+                      ))}
+                      {level.topics.length > 3 && (
+                        <span className="px-2 py-1 bg-gray-50 text-gray-600 rounded-full border border-gray-100 font-medium">+{level.topics.length - 3} more</span>
+                      )}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="text-center">
+              <button
+                onClick={closeModal}
+                className="mt-4 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition"
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
+      )}
 
       </div>
 
