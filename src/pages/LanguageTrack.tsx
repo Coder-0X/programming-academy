@@ -2,12 +2,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { ArrowLeft, Play, Clock, Book, CheckCircle, Lock } from 'lucide-react';
 import { languageTracks } from '../data/languageTracks';
-import { useProgress } from '../context/ProgressContext';
 
 const LanguageTrack = () => {
   const { language } = useParams<{ language: string }>();
   const navigate = useNavigate();
-  const { getProgress } = useProgress();
 
   // Scroll to top when component mounts
   useEffect(() => {
@@ -15,7 +13,6 @@ const LanguageTrack = () => {
   }, [language]);
 
   const track = languageTracks.find(t => t.id === language);
-  const progress = getProgress(language || '');
 
   if (!track) {
     return (
@@ -33,15 +30,11 @@ const LanguageTrack = () => {
     );
   }
 
-  const completedLevels = progress?.completedLevels || [];
-  const currentLevel = progress?.currentLevel || 1;
+  // All levels unlocked and none completed (static, since no progress context)
+  const completedLevels: number[] = [];
+  const currentLevel = 1;
 
-  const isLevelUnlocked = (levelId: number) => {
-    if (levelId === 1) return true;
-    const level = track.levels.find(l => l.id === levelId);
-    if (!level?.prerequisites) return true;
-    return level.prerequisites.every(prereq => completedLevels.includes(prereq));
-  };
+  const isLevelUnlocked = (levelId: number) => true;
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty) {
@@ -54,7 +47,7 @@ const LanguageTrack = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Enhanced Header */}
+      {/* Header */}
       <div className={`hero-gradient relative overflow-hidden`}>
         <div className="hero-overlay">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
@@ -123,7 +116,7 @@ const LanguageTrack = () => {
                 {/* Animated Background Gradient */}
                 <div className={`absolute inset-0 bg-gradient-to-br ${track.gradient} opacity-5 rounded-xl`}></div>
                 
-                {/* Status Icon with enhanced styling */}
+                {/* Status Icon */}
                 <div className="absolute -top-3 -right-3 z-10">
                   {isCompleted ? (
                     <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center shadow-lg animate-pulse-glow">
@@ -179,25 +172,13 @@ const LanguageTrack = () => {
                       </span>
                     )}
                   </div>
-
-                  {level.prerequisites && level.prerequisites.length > 0 && !isUnlocked && (
-                    <div className="text-xs text-red-600 mt-3 p-2 bg-red-50 rounded-lg border border-red-100">
-                      🔒 Requires: Level {level.prerequisites.join(', ')}
-                    </div>
-                  )}
-                  
-                  {isUnlocked && (
-                    <div className="text-center pt-2">
-                      <span className="text-xs text-blue-600 font-medium">Click to start →</span>
-                    </div>
-                  )}
                 </div>
               </div>
             );
           })}
         </div>
 
-        {/* Enhanced Progress Bar */}
+        {/* Progress Bar */}
         <div className="mt-12 glass-card p-8 shadow-glow">
           <div className="flex items-center justify-between mb-6">
             <h3 className="text-2xl font-semibold text-gray-900">Overall Progress</h3>
