@@ -6,7 +6,7 @@ import TopicModal from '../components/TopicModal';
 import topicData, { TopicDetails } from '../data/topicData';
 
 const LevelPage = () => {
-  const { language, levelId } = useParams<{ language: string; levelId: string }>();
+  const { language: languageId, levelId } = useParams<{ language: string; levelId: string }>();
   const navigate = useNavigate();
   const [selectedTopic, setSelectedTopic] = useState<TopicDetails | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,9 +14,9 @@ const LevelPage = () => {
   // Scroll to top when component mounts or level changes
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [language, levelId]);
+  }, [languageId, levelId]);
 
-  const track = languageTracks.find(t => t.id === language);
+  const track = languageTracks.find(t => t.id === languageId);
   const level = track?.levels.find(l => l.id === parseInt(levelId || '0'));
 
   if (!track || !level) {
@@ -45,9 +45,9 @@ const LevelPage = () => {
   const handleNextLevel = () => {
     const nextLevel = track.levels.find(l => l.id === level.id + 1);
     if (nextLevel) {
-      navigate(`/${language}/level/${nextLevel.id}`);
+      navigate(`/${languageId}/level/${nextLevel.id}`);
     } else {
-      navigate(`/${language}`);
+      navigate(`/${languageId}`);
     }
   };
 
@@ -88,7 +88,7 @@ const LevelPage = () => {
       <div className={`bg-gradient-to-r ${track.gradient} text-white py-12`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <button
-            onClick={() => navigate(`/${language}`)}
+            onClick={() => navigate(`/${languageId}`)}
             className="flex items-center text-white/80 hover:text-white mb-6 transition-colors"
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
@@ -254,7 +254,7 @@ const LevelPage = () => {
                 {track.levels.map((l) => (
                   <button
                     key={l.id}
-                    onClick={() => navigate(`/${language}/level/${l.id}`)}
+                    onClick={() => navigate(`/${languageId}/level/${l.id}`)}
                     className={`w-full text-left p-3 rounded-lg transition-colors ${
                       l.id === level.id
                         ? 'bg-blue-100 text-blue-800 border border-blue-200'
