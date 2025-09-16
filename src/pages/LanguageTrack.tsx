@@ -1,181 +1,557 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
-import { ArrowLeft, Play, Clock, Book } from 'lucide-react';
-import { languageTracks } from '../data/languageTracks';
+// ...existing code...
 
-
-const LanguageTrack = () => {
-  const { language: languageId } = useParams<{ language: string }>();
-  const navigate = useNavigate();
-
-  // Scroll to top when component mounts
-  useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }, [languageId]);
-
-  const track = languageTracks.find(t => t.id === languageId);
-
-  if (!track) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Language Not Found</h1>
-          <button
-            onClick={() => navigate('/')}
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Go Back Home
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // All levels are unlocked and none are completed (static demo)
-  const currentLevel = 1;
-
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'beginner': return 'bg-green-100 text-green-800';
-      case 'intermediate': return 'bg-yellow-100 text-yellow-800';
-      case 'advanced': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
-      {/* Enhanced Header */}
-      <div className={`hero-gradient relative overflow-hidden`}>
-        <div className="hero-overlay">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <button
-              onClick={() => navigate('/')}
-              className="btn-secondary mb-8 animate-float"
-            >
-              <ArrowLeft className="w-5 h-5 mr-2" />
-              Back to Home
-            </button>
-            
-            <div className="flex items-center mb-8">
-              <div className="text-7xl mr-6 animate-float" style={{ animationDelay: '0.5s' }}>
-                {track.icon}
-              </div>
-              <div>
-                <h1 className="text-5xl font-bold mb-3 text-white">
-                  {track.name} <span className="animate-text-shimmer">Track</span>
-                </h1>
-                <p className="text-xl text-blue-100 leading-relaxed max-w-2xl">
-                  {track.description}
-                </p>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="stats-card">
-                <div className="text-3xl font-bold text-white mb-1">{track.totalLevels}</div>
-                <div className="text-blue-100">Total Levels</div>
-              </div>
-              <div className="stats-card">
-                <div className="text-3xl font-bold text-white mb-1">0</div>
-                <div className="text-blue-100">Completed</div>
-              </div>
-              <div className="stats-card">
-                <div className="text-3xl font-bold text-white mb-1">0%</div>
-                <div className="text-blue-100">Progress</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Levels Grid */}
-      <div className="max-w-7xl mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {track.levels.map((level) => {
-            const isCurrent = level.id === currentLevel;
-            return (
-              <div
-                key={level.id}
-                className={`level-card relative transform transition-all duration-300 cursor-pointer hover:scale-105 ${isCurrent ? 'ring-2 ring-blue-500 shadow-glow' : ''}`}
-                onClick={() => navigate(`/${languageId}/level/${level.id}`)}
-              >
-                {/* Animated Background Gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${track.gradient} opacity-5 rounded-xl`}></div>
-                {/* Status Icon with enhanced styling */}
-                <div className="absolute -top-3 -right-3 z-10">
-                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-                    <Play className="w-6 h-6 text-white ml-1" />
-                  </div>
-                </div>
-                <div className="relative z-10 mb-6">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-bold text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
-                      Level {level.id}
-                    </span>
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getDifficultyColor(level.difficulty)}`}>
-                      {level.difficulty}
-                    </span>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">{level.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{level.description}</p>
-                </div>
-                <div className="space-y-4 relative z-10">
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Clock className="w-4 h-4 mr-2 text-blue-500" />
-                    <span className="font-medium">{level.estimatedTime}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-500">
-                    <Book className="w-4 h-4 mr-2 text-green-500" />
-                    <span className="font-medium">{level.topics.length} Topics</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {level.topics.slice(0, 3).map((topic) => (
-                      <span
-                        key={topic}
-                        className="px-3 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-medium border border-blue-100"
-                      >
-                        {topic}
-                      </span>
-                    ))}
-                    {level.topics.length > 3 && (
-                      <span className="px-3 py-1 bg-gray-50 text-gray-600 text-xs rounded-full font-medium border border-gray-100">
-                        +{level.topics.length - 3} more
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Enhanced Progress Bar */}
-        <div className="mt-12 glass-card p-8 shadow-glow">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-2xl font-semibold text-gray-900">Overall Progress</h3>
-            <div className="text-right">
-              <div className="text-2xl font-bold text-gradient">0%</div>
-              <span className="text-sm text-gray-600">
-                0 of {track.totalLevels} levels completed
-              </span>
-            </div>
-          </div>
-          <div className="progress-bar mb-4">
-            <div
-              className={`progress-fill bg-gradient-to-r ${track.gradient}`}
-              style={{ width: `0%` }}
-            ></div>
-          </div>
-          <div className="flex justify-between text-sm text-gray-500">
-            <span>Beginner</span>
-            <span>Intermediate</span>
-            <span>Advanced</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+export type LanguageTrack = {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  gradient: string;
+  totalLevels: number;
+  levels: Array<{
+    id: number;
+    title: string;
+    description: string;
+    topics: string[];
+    codeExample?: string;
+    estimatedTime: string;
+    difficulty: string;
+  }>;
 };
 
-export default LanguageTrack;
+// ...existing code...
+import { LanguageTrack } from '../types';
+
+export const languageTracks: LanguageTrack[] = [
+  {
+    id: 'html',
+    name: 'HTML',
+    icon: '📝',
+    description: 'Master the foundation of web development with HTML structure and semantics',
+    color: 'orange',
+    gradient: 'from-orange-400 to-red-500',
+    totalLevels: 10,
+    levels: [
+      {
+        id: 1,
+        title: 'Basic Structure & Tags',
+        description: 'Learn HTML document structure, basic tags, and how to create your first webpage',
+        difficulty: 'beginner',
+        topics: ['HTML Document Structure', 'Head and Body Tags', 'Headings', 'Paragraphs', 'Basic Formatting'],
+        estimatedTime: '30 minutes',
+        codeExample: `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My First Page</title>
+</head>
+<body>
+    <h1>Welcome to HTML</h1>
+    <p>This is my first webpage!</p>
+</body>
+</html>`
+      },
+      {
+        id: 2,
+        title: 'Forms & Input Elements',
+        description: 'Create interactive forms with various input types and validation',
+        difficulty: 'beginner',
+        topics: ['Form Elements', 'Input Types', 'Labels', 'Buttons', 'Form Validation'],
+        estimatedTime: '45 minutes',
+        prerequisites: [1]
+      },
+      {
+        id: 3,
+        title: 'Semantic HTML5',
+        description: 'Use semantic elements to create meaningful and accessible web structures',
+        difficulty: 'intermediate',
+        topics: ['Semantic Elements', 'Article', 'Section', 'Header', 'Footer', 'Nav'],
+        estimatedTime: '40 minutes',
+        prerequisites: [1, 2]
+      },
+      {
+        id: 4,
+        title: 'Multimedia & Embedding',
+        description: 'Embed images, videos, audio, and external content',
+        difficulty: 'intermediate',
+        topics: ['Images', 'Video', 'Audio', 'Iframes', 'Canvas', 'SVG'],
+        estimatedTime: '50 minutes',
+        prerequisites: [3]
+      },
+      {
+        id: 5,
+        title: 'Tables & Data',
+        description: 'Create and style data tables with proper structure',
+        difficulty: 'intermediate',
+        topics: ['Table Structure', 'Headers', 'Rows', 'Columns', 'Styling Tables'],
+        estimatedTime: '35 minutes',
+        prerequisites: [3]
+      },
+      {
+        id: 6,
+        title: 'Advanced Forms',
+        description: 'Build complex forms with custom validation and accessibility',
+        difficulty: 'intermediate',
+        topics: ['Custom Validation', 'Fieldsets', 'Progress', 'Datalist', 'Form Accessibility'],
+        estimatedTime: '60 minutes',
+        prerequisites: [2, 5]
+      },
+      {
+        id: 7,
+        title: 'Accessibility & ARIA',
+        description: 'Make your websites accessible to all users with ARIA and best practices',
+        difficulty: 'advanced',
+        topics: ['ARIA Labels', 'Screen Readers', 'Keyboard Navigation', 'Semantic Markup'],
+        estimatedTime: '55 minutes',
+        prerequisites: [3, 6]
+      },
+      {
+        id: 8,
+        title: 'Web Components',
+        description: 'Create reusable custom elements with Web Components',
+        difficulty: 'advanced',
+        topics: ['Custom Elements', 'Shadow DOM', 'Templates', 'Slots'],
+        estimatedTime: '70 minutes',
+        prerequisites: [7]
+      },
+      {
+        id: 9,
+        title: 'Progressive Enhancement',
+        description: 'Build websites that work everywhere with progressive enhancement',
+        difficulty: 'advanced',
+        topics: ['Feature Detection', 'Graceful Degradation', 'Performance', 'Compatibility'],
+        estimatedTime: '65 minutes',
+        prerequisites: [8]
+      },
+      {
+        id: 10,
+        title: 'Modern HTML APIs',
+        description: 'Explore cutting-edge HTML APIs and browser features',
+        difficulty: 'advanced',
+        topics: ['Web Storage', 'Geolocation', 'File API', 'Drag & Drop', 'Service Workers'],
+        estimatedTime: '80 minutes',
+        prerequisites: [9]
+      }
+    ]
+  },
+  {
+    id: 'css',
+    name: 'CSS',
+    icon: '🎨',
+    description: 'Style beautiful and responsive websites with modern CSS techniques',
+    color: 'blue',
+    gradient: 'from-blue-400 to-purple-500',
+    totalLevels: 10,
+    levels: [
+      {
+        id: 1,
+        title: 'CSS Basics & Selectors',
+        description: 'Learn CSS syntax, selectors, and how to style HTML elements',
+        difficulty: 'beginner',
+        topics: ['CSS Syntax', 'Selectors', 'Properties', 'Values', 'Colors'],
+        estimatedTime: '40 minutes'
+      },
+      {
+        id: 2,
+        title: 'Box Model & Layout',
+        description: 'Understand the CSS box model and basic layout principles',
+        difficulty: 'beginner',
+        topics: ['Box Model', 'Margin', 'Padding', 'Border', 'Width', 'Height'],
+        estimatedTime: '45 minutes',
+        prerequisites: [1]
+      },
+      {
+        id: 3,
+        title: 'Flexbox Layout',
+        description: 'Master flexible box layout for modern web design',
+        difficulty: 'intermediate',
+        topics: ['Flex Container', 'Flex Items', 'Alignment', 'Direction', 'Wrap'],
+        estimatedTime: '60 minutes',
+        prerequisites: [2]
+      },
+      {
+        id: 4,
+        title: 'CSS Grid',
+        description: 'Create complex layouts with CSS Grid system',
+        difficulty: 'intermediate',
+        topics: ['Grid Container', 'Grid Items', 'Tracks', 'Areas', 'Alignment'],
+        estimatedTime: '75 minutes',
+        prerequisites: [3]
+      },
+      {
+        id: 5,
+        title: 'Responsive Design',
+        description: 'Build websites that work on all devices and screen sizes',
+        difficulty: 'intermediate',
+        topics: ['Media Queries', 'Viewport', 'Breakpoints', 'Mobile-First'],
+        estimatedTime: '55 minutes',
+        prerequisites: [3, 4]
+      },
+      {
+        id: 6,
+        title: 'Animations & Transitions',
+        description: 'Add life to your designs with CSS animations and transitions',
+        difficulty: 'intermediate',
+        topics: ['Transitions', 'Animations', 'Keyframes', 'Transform', 'Timing Functions'],
+        estimatedTime: '65 minutes',
+        prerequisites: [3]
+      },
+      {
+        id: 7,
+        title: 'Advanced Selectors & Pseudo-classes',
+        description: 'Master complex selectors and pseudo-class techniques',
+        difficulty: 'advanced',
+        topics: ['Advanced Selectors', 'Pseudo-classes', 'Pseudo-elements', 'Attribute Selectors'],
+        estimatedTime: '50 minutes',
+        prerequisites: [1, 5]
+      },
+      {
+        id: 8,
+        title: 'CSS Variables & Custom Properties',
+        description: 'Use CSS custom properties to create maintainable stylesheets',
+        difficulty: 'advanced',
+        topics: ['CSS Variables', 'Custom Properties', 'Theming', 'Dynamic Styles'],
+        estimatedTime: '45 minutes',
+        prerequisites: [7]
+      },
+      {
+        id: 9,
+        title: 'Modern CSS Features',
+        description: 'Explore cutting-edge CSS features and techniques',
+        difficulty: 'advanced',
+        topics: ['Container Queries', 'Subgrid', 'Logical Properties', 'Color Functions'],
+        estimatedTime: '70 minutes',
+        prerequisites: [8]
+      },
+      {
+        id: 10,
+        title: 'Performance & Optimization',
+        description: 'Optimize CSS for performance and maintainability',
+        difficulty: 'advanced',
+        topics: ['Performance', 'Critical CSS', 'Optimization', 'Best Practices'],
+        estimatedTime: '60 minutes',
+        prerequisites: [9]
+      }
+    ]
+  },
+  {
+    id: 'javascript',
+    name: 'JavaScript',
+    icon: '⚡',
+    description: 'Bring your websites to life with interactive JavaScript programming',
+    color: 'yellow',
+    gradient: 'from-yellow-400 to-orange-500',
+    totalLevels: 10,
+    levels: [
+      {
+        id: 1,
+        title: 'Variables & Data Types',
+        description: 'Learn JavaScript basics: variables, data types, and operators',
+        difficulty: 'beginner',
+        topics: ['Variables', 'Data Types', 'Operators', 'Console', 'Comments'],
+        estimatedTime: '45 minutes',
+        codeExample: `// Variables and data types
+let name = "JavaScript";
+const year = 2025;
+let isAwesome = true;
+
+console.log("Welcome to " + name + "!");`
+      },
+      {
+        id: 2,
+        title: 'Functions & Scope',
+        description: 'Master functions, parameters, return values, and scope',
+        difficulty: 'beginner',
+        topics: ['Functions', 'Parameters', 'Return', 'Scope', 'Arrow Functions'],
+        estimatedTime: '50 minutes',
+        prerequisites: [1]
+      },
+      {
+        id: 3,
+        title: 'Arrays & Objects',
+        description: 'Work with complex data structures and object manipulation',
+        difficulty: 'beginner',
+        topics: ['Arrays', 'Objects', 'Methods', 'Properties', 'Iteration'],
+        estimatedTime: '60 minutes',
+        prerequisites: [2]
+      },
+      {
+        id: 4,
+        title: 'DOM Manipulation',
+        description: 'Interact with HTML elements and modify web pages dynamically',
+        difficulty: 'intermediate',
+        topics: ['DOM', 'Selectors', 'Events', 'Element Manipulation', 'Styling'],
+        estimatedTime: '65 minutes',
+        prerequisites: [3]
+      },
+      {
+        id: 5,
+        title: 'Events & Interactivity',
+        description: 'Handle user interactions and create responsive interfaces',
+        difficulty: 'intermediate',
+        topics: ['Event Listeners', 'Event Object', 'Event Delegation', 'Form Handling'],
+        estimatedTime: '55 minutes',
+        prerequisites: [4]
+      },
+      {
+        id: 6,
+        title: 'Async/Await & Promises',
+        description: 'Handle asynchronous operations and API calls',
+        difficulty: 'intermediate',
+        topics: ['Promises', 'Async/Await', 'Callbacks', 'Error Handling', 'API Calls'],
+        estimatedTime: '70 minutes',
+        prerequisites: [5]
+      },
+      {
+        id: 7,
+        title: 'ES6+ Features',
+        description: 'Modern JavaScript features and syntax improvements',
+        difficulty: 'intermediate',
+        topics: ['Destructuring', 'Template Literals', 'Modules', 'Classes', 'Spread Operator'],
+        estimatedTime: '60 minutes',
+        prerequisites: [3, 6]
+      },
+      {
+        id: 8,
+        title: 'APIs & Fetch',
+        description: 'Connect to external APIs and handle data exchange',
+        difficulty: 'advanced',
+        topics: ['Fetch API', 'REST APIs', 'JSON', 'Error Handling', 'Authentication'],
+        estimatedTime: '75 minutes',
+        prerequisites: [6, 7]
+      },
+      {
+        id: 9,
+        title: 'Object-Oriented Programming',
+        description: 'Apply OOP principles in JavaScript development',
+        difficulty: 'advanced',
+        topics: ['Classes', 'Inheritance', 'Polymorphism', 'Encapsulation', 'Prototypes'],
+        estimatedTime: '80 minutes',
+        prerequisites: [7, 8]
+      },
+      {
+        id: 10,
+        title: 'Advanced Patterns & Frameworks',
+        description: 'Explore design patterns and popular JavaScript frameworks',
+        difficulty: 'advanced',
+        topics: ['Design Patterns', 'Module Pattern', 'MVC', 'Framework Introduction', 'Best Practices'],
+        estimatedTime: '90 minutes',
+        prerequisites: [9]
+      }
+    ]
+  },
+  {
+    id: 'java',
+    name: 'Java',
+    icon: '☕',
+    description: 'Build robust applications with Java enterprise programming',
+    color: 'red',
+    gradient: 'from-red-400 to-pink-500',
+    totalLevels: 10,
+    levels: [
+      {
+        id: 1,
+        title: 'Syntax & Basic Concepts',
+        description: 'Learn Java syntax, variables, and fundamental programming concepts',
+        difficulty: 'beginner',
+        topics: ['Java Syntax', 'Variables', 'Data Types', 'Operators', 'Control Structures'],
+        estimatedTime: '60 minutes',
+        codeExample: `public class HelloJava {
+    public static void main(String[] args) {
+        String message = "Hello, Java!";
+        int year = 2025;
+        
+        System.out.println(message + " Welcome to " + year);
+    }
+}`
+      },
+      {
+        id: 2,
+        title: 'Object-Oriented Programming',
+        description: 'Master classes, objects, inheritance, and polymorphism',
+        difficulty: 'beginner',
+        topics: ['Classes', 'Objects', 'Inheritance', 'Polymorphism', 'Encapsulation'],
+        estimatedTime: '75 minutes',
+        prerequisites: [1]
+      },
+      {
+        id: 3,
+        title: 'Collections & Data Structures',
+        description: 'Work with Java collections framework and data structures',
+        difficulty: 'intermediate',
+        topics: ['ArrayList', 'HashMap', 'Sets', 'Queues', 'Iterators'],
+        estimatedTime: '70 minutes',
+        prerequisites: [2]
+      },
+      {
+        id: 4,
+        title: 'Exception Handling',
+        description: 'Handle errors gracefully with Java exception mechanisms',
+        difficulty: 'intermediate',
+        topics: ['Try-Catch', 'Throw', 'Custom Exceptions', 'Finally', 'Error Types'],
+        estimatedTime: '55 minutes',
+        prerequisites: [2, 3]
+      },
+      {
+        id: 5,
+        title: 'File I/O & Streams',
+        description: 'Read and write files, work with input/output streams',
+        difficulty: 'intermediate',
+        topics: ['File Operations', 'Streams', 'Readers', 'Writers', 'Serialization'],
+        estimatedTime: '65 minutes',
+        prerequisites: [4]
+      },
+      {
+        id: 6,
+        title: 'Multithreading',
+        description: 'Create concurrent applications with Java threading',
+        difficulty: 'advanced',
+        topics: ['Threads', 'Synchronization', 'Executors', 'Concurrent Collections', 'Thread Safety'],
+        estimatedTime: '85 minutes',
+        prerequisites: [5]
+      },
+      {
+        id: 7,
+        title: 'Generics & Annotations',
+        description: 'Use generics for type safety and annotations for metadata',
+        difficulty: 'advanced',
+        topics: ['Generic Classes', 'Type Parameters', 'Wildcards', 'Annotations', 'Reflection'],
+        estimatedTime: '70 minutes',
+        prerequisites: [3, 6]
+      },
+      {
+        id: 8,
+        title: 'Design Patterns',
+        description: 'Implement common design patterns in Java applications',
+        difficulty: 'advanced',
+        topics: ['Singleton', 'Factory', 'Observer', 'Strategy', 'MVC Pattern'],
+        estimatedTime: '80 minutes',
+        prerequisites: [2, 7]
+      },
+      {
+        id: 9,
+        title: 'Spring Framework',
+        description: 'Build enterprise applications with Spring framework',
+        difficulty: 'advanced',
+        topics: ['Spring Core', 'Dependency Injection', 'Spring Boot', 'REST APIs', 'Database Integration'],
+        estimatedTime: '95 minutes',
+        prerequisites: [8]
+      },
+      {
+        id: 10,
+        title: 'Advanced Java & Performance',
+        description: 'Optimize Java applications and explore advanced features',
+        difficulty: 'advanced',
+        topics: ['JVM Tuning', 'Memory Management', 'Performance', 'Lambda Expressions', 'Stream API'],
+        estimatedTime: '90 minutes',
+        prerequisites: [9]
+      }
+    ]
+  },
+  {
+    id: 'python',
+    name: 'Python',
+    icon: '🐍',
+    description: 'From basics to AI: master Python for web development, data science, and machine learning',
+    color: 'green',
+    gradient: 'from-green-400 to-blue-500',
+    totalLevels: 10,
+    levels: [
+      {
+        id: 1,
+        title: 'Syntax & Basic Concepts',
+        description: 'Learn Python syntax, variables, and fundamental programming concepts',
+        difficulty: 'beginner',
+        topics: ['Python Syntax', 'Variables', 'Data Types', 'Operators', 'Input/Output'],
+        estimatedTime: '45 minutes',
+        codeExample: `# Welcome to Python!
+name = "Python"
+year = 2025
+is_awesome = True
+
+print(f"Hello {name}! Welcome to {year}!")
+print(f"Is Python awesome? {is_awesome}")`
+      },
+      {
+        id: 2,
+        title: 'Data Structures',
+        description: 'Master Python lists, dictionaries, tuples, and sets',
+        difficulty: 'beginner',
+        topics: ['Lists', 'Dictionaries', 'Tuples', 'Sets', 'List Comprehensions'],
+        estimatedTime: '55 minutes',
+        prerequisites: [1]
+      },
+      {
+        id: 3,
+        title: 'Functions & Modules',
+        description: 'Create reusable code with functions and organize with modules',
+        difficulty: 'beginner',
+        topics: ['Functions', 'Parameters', 'Return Values', 'Modules', 'Packages'],
+        estimatedTime: '50 minutes',
+        prerequisites: [2]
+      },
+      {
+        id: 4,
+        title: 'Object-Oriented Programming',
+        description: 'Apply OOP principles in Python development',
+        difficulty: 'intermediate',
+        topics: ['Classes', 'Objects', 'Inheritance', 'Methods', 'Properties'],
+        estimatedTime: '65 minutes',
+        prerequisites: [3]
+      },
+      {
+        id: 5,
+        title: 'File Handling & Exceptions',
+        description: 'Work with files and handle errors gracefully',
+        difficulty: 'intermediate',
+        topics: ['File Operations', 'Exception Handling', 'Context Managers', 'CSV', 'JSON'],
+        estimatedTime: '60 minutes',
+        prerequisites: [4]
+      },
+      {
+        id: 6,
+        title: 'Libraries & Packages',
+        description: 'Explore Python ecosystem and popular libraries',
+        difficulty: 'intermediate',
+        topics: ['pip', 'Virtual Environments', 'requests', 'datetime', 'os'],
+        estimatedTime: '55 minutes',
+        prerequisites: [5]
+      },
+      {
+        id: 7,
+        title: 'Web Development (Flask/Django)',
+        description: 'Build web applications with Python frameworks',
+        difficulty: 'advanced',
+        topics: ['Flask Basics', 'Routes', 'Templates', 'Django Introduction', 'Database Integration'],
+        estimatedTime: '85 minutes',
+        prerequisites: [6]
+      },
+      {
+        id: 8,
+        title: 'Data Science & Pandas',
+        description: 'Analyze and manipulate data with pandas and numpy',
+        difficulty: 'advanced',
+        topics: ['NumPy', 'Pandas', 'Data Analysis', 'Visualization', 'Data Cleaning'],
+        estimatedTime: '80 minutes',
+        prerequisites: [6]
+      },
+      {
+        id: 9,
+        title: 'Machine Learning Basics',
+        description: 'Introduction to machine learning with scikit-learn',
+        difficulty: 'advanced',
+        topics: ['ML Concepts', 'Scikit-learn', 'Classification', 'Regression', 'Model Evaluation'],
+        estimatedTime: '90 minutes',
+        prerequisites: [8]
+      },
+      {
+        id: 10,
+        title: 'Advanced Python & Frameworks',
+        description: 'Master advanced Python concepts and modern frameworks',
+        difficulty: 'advanced',
+        topics: ['Decorators', 'Generators', 'Async/Await', 'FastAPI', 'Best Practices'],
+        estimatedTime: '95 minutes',
+        prerequisites: [7, 9]
+      }
+    ]
+  }
+];
