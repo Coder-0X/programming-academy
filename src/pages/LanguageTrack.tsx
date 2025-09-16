@@ -1,6 +1,4 @@
-// ...existing code...
-
-type LanguageTrack = {
+export type LanguageTrack = {
   id: string;
   name: string;
   icon: string;
@@ -19,11 +17,6 @@ type LanguageTrack = {
     prerequisites?: number[];
   }>;
 };
-
-export type { LanguageTrack };
-
-// ...existing code...
-
 
 export const languageTracks: LanguageTrack[] = [
   {
@@ -560,3 +553,4 @@ print(f"Is Python awesome? {is_awesome}")`
   }
 ];
 export default LanguageTrack;
+
