@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Code, BookOpen, Trophy, Users, Star, ChevronRight, Zap, Sparkles, Rocket, Target } from 'lucide-react';
+import { BookOpen, Trophy, Users, Star, ChevronRight, Zap, Sparkles, Rocket, Target } from 'lucide-react';
 import { languageTracks } from '../data/languageTracks';
 import { useScrollReveal } from '../hooks/useAnimations';
 
@@ -226,3 +226,4 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
